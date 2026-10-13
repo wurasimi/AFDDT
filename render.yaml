@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: afddt
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run.py --lan --no-browser --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
