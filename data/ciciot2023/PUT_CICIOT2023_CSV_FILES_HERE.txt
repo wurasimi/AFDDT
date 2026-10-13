@@ -1,0 +1,2 @@
+Copy the CICIoT2023 CSV files (for example part-00000-363d1ba3-....csv) into this folder.
+See README.md, step 9, for where to download them.

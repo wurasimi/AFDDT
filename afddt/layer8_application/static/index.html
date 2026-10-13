@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFDDT operator console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Big+Shoulders+Display:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1EE; --panel:#FFFFFF; --ink:#1D2A33; --muted:#5E6B73; --line:#D5DBD7;
+  --twin:#0F7C80; --twin-soft:#DCEFEE; --warn:#B87A07; --warn-soft:#FBF0D6;
+  --bad:#B3261E; --bad-soft:#F8E1DF; --human:#5B4BB7; --human-soft:#ECE9FA; --ok:#3B7A3B;
+  --r-lg:14px; --r-sm:8px;
+  --display:"Big Shoulders Display", "Arial Narrow", sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
+button{font:inherit;cursor:pointer}
+button:focus-visible, input:focus-visible, tr:focus-visible{outline:3px solid var(--twin);outline-offset:2px}
+
+/* header */
+header{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;padding:14px 22px;background:var(--ink);color:#F2F5F3}
+.brand{display:flex;align-items:baseline;gap:12px}
+.brand b{font:800 30px/1 var(--display);letter-spacing:.5px}
+.brand span{color:#B9C5C9;font-size:14px}
+.status{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-left:auto;font-size:14px}
+.status .tick{font:600 22px/1 var(--display)}
+.uplink{border:1.5px solid #8FD3D0;background:transparent;color:#F2F5F3;border-radius:999px;padding:5px 14px}
+.uplink.off{border-color:#F0A39C;color:#F8D3CF}
+.engine{color:#B9C5C9;max-width:340px}
+
+/* metrics */
+.metrics{display:flex;flex-wrap:wrap;gap:6px 26px;padding:10px 22px;border-bottom:1px solid var(--line);background:#F7F9F7;font-size:14px;color:var(--muted)}
+.metrics strong{color:var(--ink);font-size:16px;margin-right:4px}
+
+/* layout */
+main{display:grid;grid-template-columns:280px minmax(0,1fr) 320px;gap:16px;padding:16px 22px 28px}
+@media (max-width:1180px){main{grid-template-columns:280px minmax(0,1fr)} .right{grid-column:1/-1}}
+@media (max-width:760px){main{grid-template-columns:minmax(0,1fr);padding:12px} header{padding:12px} .metrics{padding:10px 12px}}
+section{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:16px}
+h2{font:700 17px/1.2 var(--body);margin:0 0 10px}
+.hint{color:var(--muted);font-size:13px;margin:-4px 0 10px}
+
+/* the twin stack: the signature element */
+.stack{display:flex;flex-direction:column;gap:6px}
+.layer{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:start;padding:9px 10px;border-radius:var(--r-sm);background:var(--twin-soft);border-left:4px solid var(--twin);transition:background .6s}
+.layer.flash{background:#BFE3E1}
+.layer .no{font:800 26px/1 var(--display);color:var(--twin);text-align:right}
+.layer .name{font-weight:700;font-size:14px}
+.layer ul{margin:2px 0 0;padding:0;list-style:none;font-size:12.5px;color:#34444D}
+.layer li{overflow-wrap:anywhere}
+@media (prefers-reduced-motion:reduce){.layer{transition:none}}
+
+/* topology */
+.topo svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);margin-top:6px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+
+/* attacks */
+.attacks{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.attacks button{background:#fff;border:1.5px solid var(--line);border-radius:var(--r-sm);padding:8px 10px;text-align:left;color:var(--ink)}
+.attacks button:hover{border-color:var(--bad)}
+.attacks button small{display:block;color:var(--muted);font-size:12px;line-height:1.3;margin-top:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.quiet{background:transparent;border:1.5px solid var(--line);border-radius:var(--r-sm);padding:6px 12px;color:var(--ink)}
+.toast{font-size:13px;color:var(--twin);min-height:1.2em}
+
+/* findings */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-weight:700;text-align:left;color:var(--muted);padding:6px 8px;border-bottom:1.5px solid var(--line)}
+td{padding:7px 8px;border-bottom:1px solid #EBEFEC;vertical-align:top}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:#F4F8F6}
+.scroll{max-height:460px;overflow:auto}
+.left,.mid,.right{min-width:0}
+.tech{font-weight:700;color:var(--twin);white-space:nowrap}
+.sev{display:inline-block;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700}
+.sev.low{background:#E7EEE7;color:var(--ok)} .sev.medium{background:var(--warn-soft);color:var(--warn)}
+.sev.high{background:var(--bad-soft);color:var(--bad)} .sev.critical{background:var(--bad);color:#fff}
+.tier{font-size:12px;color:var(--muted);white-space:nowrap}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+
+/* approvals */
+.approval{border:1.5px solid var(--human);background:var(--human-soft);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:10px}
+.approval p{margin:0 0 6px;font-size:13.5px}
+.approval .what{font-weight:700;font-size:14.5px}
+.approval .meta{color:#4A4170;font-size:12.5px}
+.approve{background:var(--human);color:#fff;border:0;border-radius:var(--r-sm);padding:6px 14px}
+.reject{background:transparent;border:1.5px solid var(--human);color:var(--human);border-radius:var(--r-sm);padding:5px 12px}
+
+/* agents */
+.agents{display:flex;flex-direction:column}
+.agent{display:grid;grid-template-columns:24px 1fr auto;gap:8px;padding:6px 0;border-bottom:1px solid #EBEFEC;font-size:13px}
+.agent .n{font:600 16px/1.2 var(--display);color:var(--muted)}
+.agent .last{grid-column:2/4;color:var(--muted);font-size:12px;overflow-wrap:anywhere}
+.agent .c{font-weight:700}
+.stage{font-size:11.5px;color:var(--twin);margin-left:6px}
+
+/* ask */
+.ask{display:flex;gap:8px}
+.ask input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:var(--r-sm);padding:7px 10px;font:inherit}
+.ask button{background:var(--ink);color:#fff;border:0;border-radius:var(--r-sm);padding:7px 14px}
+.answer{font-size:13.5px;margin-top:8px;white-space:pre-wrap}
+
+/* audit */
+.audit{font-size:12.5px;color:#34444D;max-height:220px;overflow:auto}
+.audit div{padding:3px 0;border-bottom:1px dashed #E3E8E4}
+.audit b{color:var(--ink)}
+
+/* finding dialog */
+dialog{border:0;border-radius:var(--r-lg);padding:0;max-width:760px;width:calc(100% - 24px);color:var(--ink)}
+dialog::backdrop{background:rgba(29,42,51,.45)}
+.dlg{padding:20px 22px}
+.dlg h3{margin:0 0 4px;font-size:19px}
+.dlg h4{margin:16px 0 6px;font-size:15px}
+.dlg p,.dlg li{font-size:14px}
+.dlg ul{margin:4px 0;padding-left:20px}
+.chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chain span{background:var(--twin-soft);color:var(--twin);font-weight:700;border-radius:6px;padding:2px 8px}
+.close{float:right;background:transparent;border:0;font-size:24px;line-height:1;color:var(--muted)}
+.fb{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><b>AFDDT</b><span>Agentic Fused Domain Digital Twin, operator console</span></div>
+  <div class="status">
+    <span>Tick <span class="tick" id="tick">0</span></span>
+    <button class="uplink" id="uplink" title="Simulate losing the Internet uplink">Uplink online</button>
+    <span class="engine" id="engine"></span>
+  </div>
+</header>
+<div class="metrics" id="metrics"></div>
+
+<main>
+  <div class="left">
+    <section>
+      <h2>The eight layers, live</h2>
+      <p class="hint">Each band is one layer of the reference architecture. It highlights when that layer does something.</p>
+      <div class="stack" id="stack"></div>
+    </section>
+  </div>
+
+  <div class="mid">
+    <section class="topo">
+      <h2>Deployment and its twins</h2>
+      <svg id="topo" viewBox="0 0 760 300" role="img" aria-label="Network topology"></svg>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--twin)"></i>normal</span>
+        <span><i class="dot" style="background:var(--warn)"></i>under investigation</span>
+        <span><i class="dot" style="background:var(--human)"></i>rate-limited</span>
+        <span><i class="dot" style="background:var(--bad)"></i>isolated</span>
+        <span>ringed devices are critical (smart meters)</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Run an attack</h2>
+      <p class="hint">Each button plays an attack against the simulated deployment. Watch the layers, findings and approvals respond.</p>
+      <div class="attacks" id="attacks"></div>
+      <div class="row">
+        <button class="quiet" id="reset">Restore the deployment</button>
+        <span class="toast" id="toast" role="status"></span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Findings</h2>
+      <p class="hint">Select a finding to see its evidence, threat-intelligence match, plan and simulation.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Tier</th><th style="width:46%">What was found</th><th>ATT&amp;CK</th><th>Severity</th><th>Decision</th></tr></thead>
+          <tbody id="findings"></tbody>
+        </table>
+        <div class="empty" id="nofindings">No findings yet. The twins are watching normal traffic; run an attack to see a response.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="right">
+    <section>
+      <h2>Needs your approval</h2>
+      <div id="pending"></div>
+    </section>
+    <section>
+      <h2>Agents</h2>
+      <div class="agents" id="agents"></div>
+    </section>
+    <section>
+      <h2>Ask the Orchestrator</h2>
+      <form class="ask" id="askform">
+        <input id="q" placeholder="Which devices are isolated?" aria-label="Question">
+        <button type="submit">Ask</button>
+      </form>
+      <div class="answer" id="answer"></div>
+    </section>
+    <section>
+      <h2>Audit log</h2>
+      <div class="audit" id="audit"></div>
+    </section>
+  </div>
+</main>
+
+<dialog id="dlg"><div class="dlg" id="dlgbody"></div></dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let last = null, prevLayers = {};
+
+async function api(path, opts={}) {
+  const r = await fetch(path, {headers:{"Content-Type":"application/json"}, ...opts});
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+function toast(msg){ $("toast").textContent = msg; clearTimeout(toast.t); toast.t = setTimeout(()=>$("toast").textContent="", 6000); }
+
+function renderLayers(layers){
+  const order = [...layers].reverse();               // Application on top, Physical at the bottom
+  $("stack").innerHTML = order.map(l => `
+    <div class="layer" data-no="${l.no}">
+      <div class="no">${l.no}</div>
+      <div><div class="name">${esc(l.name)}</div><ul>${l.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul></div>
+    </div>`).join("");
+  for (const l of layers){
+    const key = l.items.join("|");
+    if (prevLayers[l.no] !== undefined && prevLayers[l.no] !== key){
+      const el = document.querySelector(`.layer[data-no="${l.no}"]`);
+      if (el){ el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"), 700); }
+    }
+    prevLayers[l.no] = key;
+  }
+}
+
+const statusColor = s => ({normal:"var(--twin)", suspect:"var(--warn)", isolated:"var(--bad)",
+                           rate_limited:"var(--human)", segmented:"var(--human)"}[s] || "var(--twin)");
+
+function renderTopo(t){
+  const W = 760, edgeY = 140, devY = 250, gwY = 40;
+  const ex = {}; t.edges.forEach((e,i)=> ex[e.id] = W*(2*i+1)/(2*t.edges.length));
+  const byEdge = {}; t.devices.forEach(d => (byEdge[d.edge] = byEdge[d.edge] || []).push(d));
+  const dx = {};
+  Object.entries(byEdge).forEach(([eid, ds]) => {
+    const span = W/t.edges.length - 40;
+    ds.forEach((d,i)=> dx[d.id] = ex[eid] - span/2 + span*(i+0.5)/ds.length);
+  });
+  let s = "";
+  t.edges.forEach(e => s += `<line x1="${W/2}" y1="${gwY+22}" x2="${ex[e.id]}" y2="${edgeY-20}" stroke="#9AA7A0" stroke-width="2"/>`);
+  t.devices.forEach(d => s += `<line x1="${ex[d.edge]}" y1="${edgeY+20}" x2="${dx[d.id]}" y2="${devY-14}" stroke="#C3CCC6" stroke-width="1.5"/>`);
+  t.lateral.forEach(([dev, edge]) => { if (dx[dev] && ex[edge])
+    s += `<line x1="${dx[dev]}" y1="${devY-14}" x2="${ex[edge]}" y2="${edgeY+20}" stroke="var(--bad)" stroke-width="2.5" stroke-dasharray="6 4"/>`; });
+  const g = t.gateway;
+  s += `<rect x="${W/2-70}" y="${gwY-20}" width="140" height="42" rx="10" fill="${statusColor(g.status)}"/>
+        <text x="${W/2}" y="${gwY+6}" fill="#fff" font-weight="700" font-size="15" text-anchor="middle">${esc(g.id)} gateway</text>`;
+  if (g.status === "segmented") s += `<text x="${W/2+80}" y="${gwY+6}" font-size="12" fill="var(--human)">segmented</text>`;
+  t.edges.forEach(e => {
+    s += `<rect x="${ex[e.id]-60}" y="${edgeY-20}" width="120" height="40" rx="9" fill="${statusColor(e.status)}"/>
+          <text x="${ex[e.id]}" y="${edgeY-2}" fill="#fff" font-weight="700" font-size="14" text-anchor="middle">${esc(e.id)}</text>
+          <text x="${ex[e.id]}" y="${edgeY+13}" fill="#E8F3F2" font-size="11" text-anchor="middle">CPU ${e.cpu}%</text>`;
+  });
+  t.devices.forEach(d => {
+    const c = statusColor(d.status);
+    s += `<g><title>${esc(d.id)} (${esc(d.class)}): ${esc(d.status)}, ${d.pkt_rate} pkt/s</title>
+          <circle cx="${dx[d.id]}" cy="${devY}" r="13" fill="${c}" ${d.critical ? 'stroke="#1D2A33" stroke-width="3"' : ""}/>
+          <text x="${dx[d.id]}" y="${devY+30}" font-size="10.5" text-anchor="middle" fill="#34444D">${esc(d.id.replace("smart-meter","meter").replace("env-sensor","sensor").replace("ip-camera","camera"))}</text></g>`;
+  });
+  $("topo").innerHTML = s;
+}
+
+function shortDecision(f){
+  if (f.status === "held") return "correlating";
+  const d = f.decision || "";
+  if (d.startsWith("auto")) return "executed automatically";
+  if (d.startsWith("awaiting")) return "waiting for approval";
+  if (d.startsWith("partly")) return "partly executed, rest waiting for approval";
+  if (d.startsWith("dismissed")) return "dismissed (known false positive)";
+  return d || "logged";
+}
+function renderFindings(fs){
+  $("nofindings").style.display = fs.length ? "none" : "block";
+  $("findings").innerHTML = fs.map(f => `
+    <tr tabindex="0" data-id="${f.id}">
+      <td style="white-space:nowrap">${f.id}</td>
+      <td class="tier">${f.tier === "cross-domain" ? "fused" : f.tier}</td>
+      <td>${esc(f.summary)}${f.escalated ? ' <span class="tier">escalated</span>' : ""}</td>
+      <td class="tech">${f.technique ? esc(f.technique) : '<span class="tier">none</span>'}</td>
+      <td><span class="sev ${f.severity}">${f.severity}</span></td>
+      <td class="tier">${esc(shortDecision(f))}</td>
+    </tr>`).join("");
+}
+
+function renderPending(ps){
+  if (!ps.length){ $("pending").innerHTML = '<div class="empty">Nothing needs your approval. High-risk actions and high-severity findings will wait here for a decision.</div>'; return; }
+  $("pending").innerHTML = ps.map(a => `
+    <div class="approval">
+      <p class="what">${esc(a.description)}</p>
+      <p class="meta">${esc(a.finding)}${a.technique ? ", " + esc(a.technique) : ""}: ${esc(a.finding_summary)}</p>
+      <p class="meta">Simulation: ${esc(a.simulation.note)}. Risk ${esc(a.risk)}.</p>
+      <div class="row" style="margin-top:4px">
+        <button class="approve" data-act="approve" data-id="${a.id}">Approve</button>
+        <button class="reject" data-act="reject" data-id="${a.id}">Reject</button>
+      </div>
+    </div>`).join("");
+}
+
+function renderAgents(as){
+  $("agents").innerHTML = as.map(a => `
+    <div class="agent"><span class="n">${a.no}</span>
+      <span>${esc(a.name)}<span class="stage">${esc(a.stage)}</span></span><span class="c">${a.count}</span>
+      <span class="last">${esc(a.last)}</span></div>`).join("");
+}
+
+function renderMetrics(m){
+  const acc = m.enrichment_accuracy == null ? "n/a" : Math.round(m.enrichment_accuracy*100) + "%";
+  const items = [["findings", m.findings], ["fused across tiers", m.fused], ["enriched", m.enriched],
+    ["auto-executed", m.auto_executed], ["escalated", m.escalated], ["enrichment accuracy", acc],
+    ["median detection latency", m.median_latency_ms == null ? "n/a" : m.median_latency_ms + " ms"],
+    ["CPU", m.cpu_percent + "%"], ["memory", m.memory_mb + " MB"]];
+  $("metrics").innerHTML = items.map(([k,v]) => `<span><strong>${v}</strong>${k}</span>`).join("");
+}
+
+function renderAudit(rows){
+  $("audit").innerHTML = rows.map(r => `<div>tick ${r.tick} <b>${esc(r.agent)}</b> ${esc(r.event)}</div>`).join("");
+}
+
+async function refresh(){
+  try{
+    const s = await api("/api/state");
+    last = s;
+    $("tick").textContent = s.tick;
+    $("engine").textContent = "Reasoning: " + s.engine;
+    $("uplink").textContent = s.online ? "Uplink online" : "Uplink offline";
+    $("uplink").classList.toggle("off", !s.online);
+    renderLayers(s.layers); renderTopo(s.topology); renderFindings(s.findings);
+    renderPending(s.pending); renderAgents(s.agents); renderMetrics(s.metrics); renderAudit(s.audit);
+    if (!$("attacks").children.length){
+      $("attacks").innerHTML = Object.entries(s.scenarios).map(([k,v]) =>
+        `<button data-sc="${k}">${esc(k.replaceAll("_"," "))}<small>${esc(v)}</small></button>`).join("");
+    }
+  }catch(e){ $("engine").textContent = "Cannot reach the AFDDT server. Is run.py still running?"; }
+}
+
+async function showFinding(id){
+  const f = await api("/api/finding/" + id);
+  const en = f.enrichment || {};
+  const ex = f.explanation || {};
+  const chain = (en.chain || []).length > 1 ? `<h4>Attack chain</h4><div class="chain">${en.chain.map(c=>`<span>${esc(c)}</span>`).join("<b>then</b>")}</div>` : "";
+  $("dlgbody").innerHTML = `
+    <button class="close" aria-label="Close" onclick="dlg.close()">&times;</button>
+    <h3>${f.id}: ${esc(f.summary)}</h3>
+    <p class="hint">${esc(f.agent)}, tick ${f.tick}, confidence ${f.confidence}, detection-to-finding latency ${f.latency_ms} ms</p>
+    <h4>What the agents observed (Layer 5 explanation)</h4>
+    <ul>${(f.observations||[]).map(o=>`<li>${esc(o)}</li>`).join("")}</ul>
+    <p>${esc(ex.text || "")}</p>
+    ${f.members && f.members.length ? `<h4>Correlated findings</h4><ul>${f.members.map(m=>`<li>${m.id} (${esc(m.tier)}): ${esc(m.summary)}</li>`).join("")}</ul>` : ""}
+    <h4>Threat-intelligence enrichment</h4>
+    ${en.technique_id ? `<p>${esc(en.explanation)}. Severity ${esc(en.severity_before)} before enrichment, ${esc(en.severity_after)} after. Reasoned with: ${esc(en.engine)}.</p>
+      <ul>${(en.candidates||[]).map(c=>`<li>${esc(c.ext_id)} ${esc(c.name)}: similarity ${c.similarity}</li>`).join("")}</ul>` : "<p>No technique matched; the finding was treated as an unclassified anomaly.</p>"}
+    ${chain}
+    <h4>Plan, simulation and decision</h4>
+    <ul>${(f.actions||[]).map(a=>`<li><b>${esc(a.description)}</b>. Simulation: ${esc(a.simulation.note)}. Status: ${esc(a.status)}${a.outcome ? ". Outcome: " + esc(a.outcome) : ""}${a.approved_by ? " (" + esc(a.approved_by) + ")" : ""}</li>`).join("") || "<li>No action planned.</li>"}</ul>
+    <p>Orchestrator decision: <b>${esc(f.decision)}</b></p>
+    <h4>Teach the system</h4>
+    <div class="fb">
+      <button class="quiet" data-fb="false_positive" data-id="${f.id}">Mark as false positive</button>
+      ${en.technique_id ? `<button class="quiet" data-fb="confirm" data-id="${f.id}">Confirm ${esc(en.technique_id)} is correct</button>` : ""}
+    </div>
+    <p class="hint" id="fbmsg" style="margin-top:8px"></p>`;
+  dlg.showModal();
+}
+
+document.addEventListener("click", async ev => {
+  const b = ev.target.closest("button, tr[data-id]");
+  if (!b) return;
+  if (b.dataset.sc){ const r = await api("/api/scenario/" + b.dataset.sc, {method:"POST"}); toast(`Started ${b.dataset.sc.replaceAll("_"," ")} against ${r.targets.join(", ")}`); }
+  else if (b.dataset.act){ const r = await api(`/api/actions/${b.dataset.id}/${b.dataset.act}`, {method:"POST"}); toast(b.dataset.act === "approve" ? `Approved: ${r.outcome}` : "Rejected"); refresh(); }
+  else if (b.dataset.fb){ const r = await api(`/api/findings/${b.dataset.id}/feedback`, {method:"POST", body:JSON.stringify({kind:b.dataset.fb})}); $("fbmsg").textContent = r.message; }
+  else if (b.id === "reset"){ await api("/api/reset", {method:"POST"}); toast("Deployment restored"); }
+  else if (b.id === "uplink"){ const r = await api("/api/connectivity", {method:"POST", body:JSON.stringify({online: !(last && last.online)})}); toast(`Uplink ${r.online ? "online" : "offline"}. Reasoning: ${r.engine}`); refresh(); }
+  else if (b.tagName === "TR"){ showFinding(b.dataset.id); }
+});
+document.addEventListener("keydown", ev => { if (ev.key === "Enter" && ev.target.matches("tr[data-id]")) showFinding(ev.target.dataset.id); });
+$("askform").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const q = $("q").value.trim(); if (!q) return;
+  $("answer").textContent = "Thinking...";
+  const r = await api("/api/ask", {method:"POST", body:JSON.stringify({question:q})});
+  $("answer").textContent = r.answer + "\n(" + r.engine.replace("_"," ") + ")";
+});
+const dlg = $("dlg");
+refresh(); setInterval(refresh, 1000);
+</script>
+</body>
+</html>

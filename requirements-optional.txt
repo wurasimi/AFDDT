@@ -1,0 +1,12 @@
+# Optional extras. Install only the ones you want (see README, step 8).
+
+# Sentence-transformer embedding model for threat-intelligence matching (about 2 GB with PyTorch).
+# Enable with:  set AFDDT_EMBEDDER=st   (Windows)   or   export AFDDT_EMBEDDER=st   (macOS/Linux)
+sentence-transformers>=2.7
+
+# Real MQTT transport through a broker such as Eclipse Mosquitto.
+# Enable with:  set MQTT_HOST=localhost
+paho-mqtt>=2.0
+
+# SHAP explanations in the evaluation (experiment E6, Layer 5).
+shap>=0.44

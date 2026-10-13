@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {"name": "1. Self-test (check every layer)", "type": "debugpy", "request": "launch",
+     "program": "${workspaceFolder}/scripts/self_test.py", "console": "integratedTerminal"},
+    {"name": "2. Run AFDDT + dashboard", "type": "debugpy", "request": "launch",
+     "program": "${workspaceFolder}/run.py", "console": "integratedTerminal"},
+    {"name": "3. Evaluation on CICIoT2023", "type": "debugpy", "request": "launch",
+     "program": "${workspaceFolder}/evaluation/run_evaluation.py", "console": "integratedTerminal"},
+    {"name": "4. Evaluation on the synthetic sample (pipeline check)", "type": "debugpy", "request": "launch",
+     "program": "${workspaceFolder}/evaluation/run_evaluation.py",
+     "args": ["--data", "data/ciciot2023_sample"], "console": "integratedTerminal"}
+  ]
+}

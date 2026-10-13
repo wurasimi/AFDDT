@@ -1,0 +1,436 @@
+{
+ "type": "bundle",
+ "id": "bundle--0ea83621-663e-5078-8429-9e3a95a5d4b4",
+ "objects": [
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--b90a16ce-a8e9-5598-aaff-3b4bd4c9bc84",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Brute Force",
+   "description": "Adversaries may use brute force to gain access to accounts when passwords are unknown, systematically guessing passwords. On IoT devices this appears as many repeated failed authentication or login attempts against a device service such as Telnet, SSH or a web interface, often from a single external address.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "credential-access"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1110",
+     "url": "https://attack.mitre.org/techniques/T1110/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--b65cf412-17d5-5168-844a-00227ef0fa78",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Valid Accounts",
+   "description": "Adversaries may obtain and abuse the credentials of existing accounts, including default credentials on devices, to gain access. A successful login from an unusual source after credentials were obtained.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "initial-access"
+    },
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "persistence"
+    },
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "defense-evasion"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1078",
+     "url": "https://attack.mitre.org/techniques/T1078/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--4ba25ee2-a22b-5eb4-b77f-eae5929f4615",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Modify System Image",
+   "description": "Adversaries may make changes to the operating system or firmware image of embedded network devices to weaken defenses or add capabilities. Evidence includes a firmware version or firmware hash that does not match the known-good image for that device.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "defense-evasion"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1601",
+     "url": "https://attack.mitre.org/techniques/T1601/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--4fdb3b40-76dd-5247-9ef1-05fa56fb17f6",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Firmware Corruption",
+   "description": "Adversaries may overwrite or corrupt the firmware of devices to render them inoperable or unable to boot, causing a loss of availability of the device.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "impact"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1495",
+     "url": "https://attack.mitre.org/techniques/T1495/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--838c77d2-bd7c-59f4-856a-f38ca3b7a7c1",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Endpoint Denial of Service",
+   "description": "Adversaries may degrade or block the availability of a system by exhausting its resources, such as CPU, memory and running processes, or by flooding a service. The host becomes saturated and unresponsive.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "impact"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1499",
+     "url": "https://attack.mitre.org/techniques/T1499/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--053e3333-5c5e-50d7-a0a7-38969f0a1a33",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Resource Hijacking",
+   "description": "Adversaries may use the compute resources of compromised systems for their own resource-intensive tasks, such as cryptocurrency mining, running unexpected jobs that consume processor and energy.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "impact"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1496",
+     "url": "https://attack.mitre.org/techniques/T1496/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--07666205-b94f-5cd3-a08c-4b6aac1df5e0",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Remote Services",
+   "description": "Adversaries may use remote services to log into and move laterally between systems in a network, reaching hosts and nodes that the compromised system does not normally communicate with.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "lateral-movement"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1021",
+     "url": "https://attack.mitre.org/techniques/T1021/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--dc52dc64-2377-5871-8636-792c3a5beecb",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Lateral Tool Transfer",
+   "description": "Adversaries may transfer tools or other files between systems in a compromised environment to spread their capability from one host to another.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "lateral-movement"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1570",
+     "url": "https://attack.mitre.org/techniques/T1570/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--4c6a941b-2408-5a9e-90e1-09e770d20ac9",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Adversary-in-the-Middle",
+   "description": "Adversaries may position themselves between networked devices, for example through ARP cache poisoning, spoofed addresses or forged frames, to intercept or alter traffic and protocol translations.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "credential-access"
+    },
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "collection"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1557",
+     "url": "https://attack.mitre.org/techniques/T1557/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--009087b7-bc9a-5d4f-88af-6ab92c4b5086",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Network Sniffing",
+   "description": "Adversaries may passively capture network traffic to collect information such as credentials or configuration details sent across the network.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "credential-access"
+    },
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "discovery"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1040",
+     "url": "https://attack.mitre.org/techniques/T1040/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--da4421ac-6014-5e39-acb3-595316a3b483",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Active Scanning",
+   "description": "Adversaries may execute active scans against victim infrastructure, probing IP blocks and many ports with scanning traffic to discover exposed hosts and services before an attack.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "reconnaissance"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1595",
+     "url": "https://attack.mitre.org/techniques/T1595/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--764c642e-2589-55ed-a8ad-9c87be06807c",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Network Service Discovery",
+   "description": "Adversaries may attempt to list the services running on remote hosts, typically with port scans and vulnerability scans that send probes such as TCP SYN packets to many ports.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "discovery"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1046",
+     "url": "https://attack.mitre.org/techniques/T1046/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--6a6c3bdf-c11f-5504-983f-6aee6b916110",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Network Denial of Service",
+   "description": "Adversaries may perform network denial of service by flooding the target's bandwidth with a high volume of packets, for example UDP, ICMP or TCP SYN floods, frequently generated by a botnet of compromised devices sending to many destinations.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "impact"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1498",
+     "url": "https://attack.mitre.org/techniques/T1498/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--e63964fe-1d72-5999-9d3d-6535f80f0711",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Exploit Public-Facing Application",
+   "description": "Adversaries may exploit a weakness in an internet-facing application or web interface, for example with SQL injection or command injection, to gain initial access.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "initial-access"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1190",
+     "url": "https://attack.mitre.org/techniques/T1190/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--90bc4d53-d2c2-5825-b186-0032416f215b",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Application Layer Protocol",
+   "description": "Adversaries may communicate with compromised systems using application layer protocols to blend in with normal traffic, with devices regularly contacting a command and control server.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "command-and-control"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1071",
+     "url": "https://attack.mitre.org/techniques/T1071/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--24c3599d-b5b8-5952-8e07-38989b1aea73",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Compromise Infrastructure: Botnet",
+   "description": "Adversaries may compromise numerous third-party systems, including IoT devices, to form a botnet that they can then direct, for example to launch large-scale denial of service.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "resource-development"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1584.005",
+     "url": "https://attack.mitre.org/techniques/T1584/005/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--46ef7531-2570-5064-9e2c-2fa1b5bfd4b8",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Impair Defenses",
+   "description": "Adversaries may disable or modify security tools and logging to avoid detection.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "defense-evasion"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1562",
+     "url": "https://attack.mitre.org/techniques/T1562/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--5dfe29c0-16d4-5d79-8202-df02b5b02174",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Data from Local System",
+   "description": "Adversaries may search local system sources, such as files and databases, to find data of interest before exfiltration.",
+   "kill_chain_phases": [
+    {
+     "kill_chain_name": "mitre-attack",
+     "phase_name": "collection"
+    }
+   ],
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1005",
+     "url": "https://attack.mitre.org/techniques/T1005/"
+    }
+   ],
+   "x_afddt_note": "Summary written for the AFDDT starter set; run scripts/update_ti.py for MITRE's text."
+  }
+ ]
+}

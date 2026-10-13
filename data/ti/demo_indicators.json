@@ -1,0 +1,159 @@
+{
+ "type": "bundle",
+ "id": "bundle--437d997e-ed70-5ba6-be67-aa8abe764c70",
+ "objects": [
+  {
+   "type": "campaign",
+   "spec_version": "2.1",
+   "id": "campaign--437d997e-ed70-5ba6-be67-aa8abe764c70",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Demo IoT botnet campaign (synthetic)",
+   "description": "Synthetic campaign used by the AFDDT attack simulator: credential guessing against cameras, lateral movement, then botnet flooding."
+  },
+  {
+   "type": "indicator",
+   "spec_version": "2.1",
+   "id": "indicator--bc1931f9-e39c-59dc-818b-284b3bafb3cf",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Credential-guessing source (demo)",
+   "description": "Synthetic demo indicator: address observed guessing device passwords.",
+   "pattern": "[ipv4-addr:value = '203.0.113.45']",
+   "pattern_type": "stix",
+   "valid_from": "2026-10-12T00:00:00.000Z",
+   "labels": [
+    "demo",
+    "synthetic"
+   ]
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--4e0c1f4e-587e-56a0-9b9d-93358b2e9cac",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "relationship_type": "indicates",
+   "source_ref": "indicator--bc1931f9-e39c-59dc-818b-284b3bafb3cf",
+   "target_ref": "attack-pattern--b90a16ce-a8e9-5598-aaff-3b4bd4c9bc84"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--a72fa4fe-af36-5f58-872f-3c60a8def599",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "relationship_type": "attributed-to",
+   "source_ref": "indicator--bc1931f9-e39c-59dc-818b-284b3bafb3cf",
+   "target_ref": "campaign--437d997e-ed70-5ba6-be67-aa8abe764c70"
+  },
+  {
+   "type": "indicator",
+   "spec_version": "2.1",
+   "id": "indicator--82021f21-1ec5-5cba-88b7-32ed4e5ee77b",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Botnet command and control server (demo)",
+   "description": "Synthetic demo indicator: command and control server directing IoT botnet floods.",
+   "pattern": "[ipv4-addr:value = '203.0.113.66']",
+   "pattern_type": "stix",
+   "valid_from": "2026-10-12T00:00:00.000Z",
+   "labels": [
+    "demo",
+    "synthetic"
+   ]
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--f082e455-2c76-5908-8070-0a71252d50e9",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "relationship_type": "indicates",
+   "source_ref": "indicator--82021f21-1ec5-5cba-88b7-32ed4e5ee77b",
+   "target_ref": "attack-pattern--6a6c3bdf-c11f-5504-983f-6aee6b916110"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--7c1dc28f-1432-5610-9960-fc34d5d77e1c",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "relationship_type": "attributed-to",
+   "source_ref": "indicator--82021f21-1ec5-5cba-88b7-32ed4e5ee77b",
+   "target_ref": "campaign--437d997e-ed70-5ba6-be67-aa8abe764c70"
+  },
+  {
+   "type": "indicator",
+   "spec_version": "2.1",
+   "id": "indicator--938aba94-0ade-5d15-906b-138db4ac5efd",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Frame spoofing source (demo)",
+   "description": "Synthetic demo indicator: address injecting spoofed frames to intercept IoT traffic.",
+   "pattern": "[ipv4-addr:value = '198.51.100.23']",
+   "pattern_type": "stix",
+   "valid_from": "2026-10-12T00:00:00.000Z",
+   "labels": [
+    "demo",
+    "synthetic"
+   ]
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--248a6204-7518-5250-b3c3-58160417268c",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "relationship_type": "indicates",
+   "source_ref": "indicator--938aba94-0ade-5d15-906b-138db4ac5efd",
+   "target_ref": "attack-pattern--4c6a941b-2408-5a9e-90e1-09e770d20ac9"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--f8a63731-5759-5dd7-9cb4-ffcae097ebb8",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "relationship_type": "attributed-to",
+   "source_ref": "indicator--938aba94-0ade-5d15-906b-138db4ac5efd",
+   "target_ref": "campaign--437d997e-ed70-5ba6-be67-aa8abe764c70"
+  },
+  {
+   "type": "indicator",
+   "spec_version": "2.1",
+   "id": "indicator--426607f6-cfb8-5bf2-83a0-7eb1d2400351",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "name": "Scanning host (demo)",
+   "description": "Synthetic demo indicator: host performing port scans against IoT gateways.",
+   "pattern": "[ipv4-addr:value = '203.0.113.77']",
+   "pattern_type": "stix",
+   "valid_from": "2026-10-12T00:00:00.000Z",
+   "labels": [
+    "demo",
+    "synthetic"
+   ]
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--02cee66a-8310-5fd2-8660-6857966ef9c8",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "relationship_type": "indicates",
+   "source_ref": "indicator--426607f6-cfb8-5bf2-83a0-7eb1d2400351",
+   "target_ref": "attack-pattern--da4421ac-6014-5e39-acb3-595316a3b483"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--f7d3769e-39d2-5db4-9f6a-c77800259196",
+   "created": "2026-10-12T00:00:00.000Z",
+   "modified": "2026-10-12T00:00:00.000Z",
+   "relationship_type": "attributed-to",
+   "source_ref": "indicator--426607f6-cfb8-5bf2-83a0-7eb1d2400351",
+   "target_ref": "campaign--437d997e-ed70-5ba6-be67-aa8abe764c70"
+  }
+ ]
+}
